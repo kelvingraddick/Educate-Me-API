@@ -1,19 +1,19 @@
 var express = require('express');
 var router = express.Router();
-//var authenticate = require('../middleware/authenticate');
-//var authorize = require('../middleware/authorize');
+var authenticate = require('../middleware/authenticate');
+var authorize = require('../middleware/authorize');
 var jwt = require('jsonwebtoken');
 var Database = require('../helpers/database');
 var UserType = require('../constants/user-type');
 var ErrorType = require('../constants/error-type');
 
-//router.post('/authenticate', authenticate, async function(req, res, next) {
-//  res.json({ isSuccess: true, token: res.token, educator: res.educator });
-//});
+router.post('/authenticate', authenticate, async function(req, res, next) {
+  res.json({ isSuccess: true, token: res.token, educator: res.educator });
+});
 
-//router.post('/authorize', authorize, async function(req, res, next) {
-//  res.json({ isSuccess: true, educator: req.educator });
-//});
+router.post('/authorize', authorize, async function(req, res, next) {
+  res.json({ isSuccess: true, educator: req.educator });
+});
 
 router.post('/register', async function(req, res, next) {
   var existingEducator = await Database.Educator.findOne({ emailAddress: req.body.emailAddress }).exec();
