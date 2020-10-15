@@ -40,4 +40,14 @@ router.post('/register', async function(req, res, next) {
   }
 });
 
+router.get('/:id', async function(req, res, next) {
+  var response = { isSuccess: false };
+
+  response.educator = await Database.Educator.findById(req.params.id).exec()
+    .catch((error) => { response.errorMessage = error.message; });
+  response.isSuccess = response.educator != null;
+  
+  res.json(response);
+});
+
 module.exports = router;
