@@ -31,7 +31,7 @@ router.post('/register', async function(req, res, next) {
     };
     Database.Educator.create(newEducator)
       .then(async createdEducator => {
-        var token = jwt.sign({ type: UserType.PATIENT }, process.env.TOKEN_SECRET, { subject: createdEducator._id, issuer: 'EducateME', expiresIn: '90d' });
+        var token = jwt.sign({ type: UserType.EDUCATOR }, process.env.TOKEN_SECRET, { subject: createdEducator._id.toString(), issuer: 'EducateME', expiresIn: '90d' });
         res.json({ isSuccess: true, educator: createdEducator, token: token });
       })
       .catch(error => { 
