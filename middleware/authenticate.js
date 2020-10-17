@@ -14,7 +14,7 @@ async function authenticate(req, res, next) {
           .exec()
           .catch((err) => { console.error(err.message); return res.sendStatus(500); });
         if (res.educator) {
-          res.token = jwt.sign({ type: UserType.EDUCATOR }, process.env.TOKEN_SECRET, { subject: res.educator.id.toString(), issuer: 'EducateME', expiresIn: '90d' });
+          res.token = jwt.sign({ type: UserType.EDUCATOR }, process.env.TOKEN_SECRET, { subject: res.educator._id, issuer: 'EducateME', expiresIn: '90d' });
           return next();
         }
       }
