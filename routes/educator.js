@@ -8,7 +8,7 @@ var UserType = require('../constants/user-type');
 var ErrorType = require('../constants/error-type');
 
 router.post('/authenticate', authenticate, async function(req, res, next) {
-  res.json({ isSuccess: true, token: res.token, educator: res.educator });
+  res.json({ isSuccess: true, token: res.token, educator: res.educator, ssoToken: res.ssoToken });
 });
 
 router.post('/authorize', authorize, async function(req, res, next) {
