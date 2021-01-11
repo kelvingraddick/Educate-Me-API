@@ -15,6 +15,13 @@ async function authorize(req, res, next) {
           .catch((err) => { console.error(err.message); return res.sendStatus(500); });
         if (req.educator) { return next(); }
         res.sendStatus(403);
+      } else if (decodedToken.type == UserType.EMPLOYER) {
+        req.employer = await Database.Employer
+					.findOne({ _id: decodedToken.sub })
+					.exec()
+          .catch((err) => { console.error(err.message); return res.sendStatus(500); });
+        if (req.employer) { return next(); }
+        res.sendStatus(403);
       }
     }
     res.sendStatus(401);

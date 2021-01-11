@@ -21,6 +21,18 @@ async function authenticate(req, res, next) {
           }
           return next();
         }
+      } else if (req.body.userType == UserType.EMPLOYER) {
+        res.employer = await Database.Employer
+          .findOne({ emailAddress: emailAddress, password: password })
+          .exec()
+          .catch((err) => { console.error(err.message); return res.sendStatus(500); });
+        if (res.employer) {
+          res.token = jwt.sign({ type: UserType.EMPLOYER }, process.env.TOKEN_SECRET, { subject: res.employer._id.toString(), issuer: 'EducateME', expiresIn: '90d' });
+          if (req.body.ssoSource == 'bevy' && req.body.ssoToken) {
+            res.ssoToken = getBevyResponseToken(res.employer, req.body.ssoToken);
+          }
+          return next();
+        }
       }
     }
     res.sendStatus(401);
@@ -34,6 +46,7 @@ function getBevyResponseToken(user, requestToken) {
   var bevyUser = user && JSON.stringify({
     uid: user._id,
     email: user.emailAddress,
+    name: user.name,
     first_name: user.name.first,
     last_name: user.name.last,
     bio: user.bio

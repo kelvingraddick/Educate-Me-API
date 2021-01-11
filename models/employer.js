@@ -1,0 +1,18 @@
+const mongoose = require('mongoose');
+
+const schema = new mongoose.Schema({
+  name: String,
+  emailAddress: String,
+  phoneNumber: String,
+  password: String,
+  website: String,
+  addressLine1: String,
+  addressLine2: String,
+  city: String,
+  state: String,
+  zipCode: String,
+  bio: String,
+  imageUrl: String
+});
+
+module.exports = mongoose.model('Employer', schema);
