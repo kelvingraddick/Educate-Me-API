@@ -7,16 +7,10 @@ const schema = new mongoose.Schema({
   password: String,
   title: String,
   bio: String,
-  imageUrl: String
-  //location: String,
-  //gender: String,
-  //raceAndEthnicity: String,
-  //desiredPositions: Array,
-  //contentAreas: Array,
-  //gradeLevels: Array,
-  //statesCertifiedIn: Array,
-  //topCitiesOfChoice: Array,
-  //yearsOfExperience: Number
+  imageUrl: String,
+  locations: [String],
+  jobCategories: [String],
+  jobs: [Object]
 });
 
 module.exports = mongoose.model('Educator', schema);
