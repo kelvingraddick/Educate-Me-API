@@ -14,6 +14,10 @@ router.get('/', async function(req, res, next) {
     ])
   }
 
+  if (req.query.title) {
+    query.where('title', { $regex: req.query.title || '', $options: 'i' });
+  }
+
   if (req.query.location) {
     query.where('locations', { $regex: req.query.location || '', $options: 'i' });
   }
