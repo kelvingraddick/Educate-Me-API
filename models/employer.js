@@ -12,7 +12,8 @@ const schema = new mongoose.Schema({
   state: String,
   zipCode: String,
   bio: String,
-  imageUrl: String
+  imageUrl: String,
+  jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' }]
 });
 
 module.exports = mongoose.model('Employer', schema);
