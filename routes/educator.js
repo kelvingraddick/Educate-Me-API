@@ -40,6 +40,42 @@ router.post('/register', async function(req, res, next) {
   }
 });
 
+router.post('/:educatorId/update', authorize, async function(req, res, next) {
+  var educatorId = req.params.educatorId;
+  var existingEducator = await Database.Educator.findOne({ emailAddress: req.body.emailAddress }).exec();
+  if (existingEducator && existingEducator._id != educatorId) {
+    res.json({ isSuccess: false, errorCode: ErrorType.EMAIL_TAKEN, errorMessage: 'This email address is already taken.' });
+  } else if (educatorId != req.educator.id) {
+    res.sendStatus(403);
+  } else {
+    var updatedEducator = {
+      name: { first: req.body.firstName, last: req.body.lastName },
+      emailAddress: req.body.emailAddress,
+      phoneNumber: req.body.phoneNumber,
+      title: req.body.title,
+      bio: req.body.bio,
+      imageUrl: req.body.imageUrl
+    };
+    Database.Educator.update({ _id: educatorId }, updatedEducator)
+      .then(async numberUpdated => {
+        console.info('Number of educators updated: ' + JSON.stringify(numberUpdated));
+
+        var foundEducator = await Database.Educator.findById(educatorId);
+        
+        /* TODO: educator changed email
+        await Email.send(foundEducator.get().emailAddress, 'Welcome to EducateME ' + foundEducator.get().firstName + '!', 'Thank you for joining the EducateME platform', Email.templates.WELCOME_PATIENT)
+          .then(() => {}, error => console.error('Email error: ' + error.message))
+          .catch(error => console.error('Email error: ' + error.message));
+        */
+
+        res.json({ isSuccess: true, educator: foundEducator });
+      })
+      .catch(error => { 
+        res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
+      });
+  }
+});
+
 router.get('/:id', async function(req, res, next) {
   var response = { isSuccess: false };
 

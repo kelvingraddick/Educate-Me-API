@@ -45,6 +45,47 @@ router.post('/register', async function(req, res, next) {
   }
 });
 
+router.post('/:employerId/update', authorize, async function(req, res, next) {
+  var employerId = req.params.employerId;
+  var existingEmployer = await Database.Employer.findOne({ emailAddress: req.body.emailAddress }).exec();
+  if (existingEmployer && existingEmployer._id != employerId) {
+    res.json({ isSuccess: false, errorCode: ErrorType.EMAIL_TAKEN, errorMessage: 'This email address is already taken.' });
+  } else if (employerId != req.employer.id) {
+    res.sendStatus(403);
+  } else {
+    var updatedEmployer = {
+      name: req.body.name,
+      emailAddress: req.body.emailAddress,
+      phoneNumber: req.body.phoneNumber,
+      website: req.body.website,
+      addressLine1: req.body.addressLine1,
+      addressLine2: req.body.addressLine2,
+      city: req.body.city,
+      state: req.body.state,
+      zipCode: req.body.zipCode,
+      bio: req.body.bio,
+      imageUrl: req.body.imageUrl
+    };
+    Database.Employer.update({ _id: employerId }, updatedEmployer)
+      .then(async numberUpdated => {
+        console.info('Number of employers updated: ' + JSON.stringify(numberUpdated));
+
+        var foundEmployer = await Database.Employer.findById(employerId);
+        
+        /* TODO: employer changed email
+        await Email.send(foundEmployer.get().emailAddress, 'Welcome to EducateME ' + foundEmployer.get().firstName + '!', 'Thank you for joining the EducateME platform', Email.templates.WELCOME_PATIENT)
+          .then(() => {}, error => console.error('Email error: ' + error.message))
+          .catch(error => console.error('Email error: ' + error.message));
+        */
+
+        res.json({ isSuccess: true, employer: foundEmployer });
+      })
+      .catch(error => { 
+        res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
+      });
+  }
+});
+
 router.get('/:id', async function(req, res, next) {
   var response = { isSuccess: false };
 
