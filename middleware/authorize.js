@@ -18,6 +18,7 @@ async function authorize(req, res, next) {
       } else if (decodedToken.type == UserType.EMPLOYER) {
         req.employer = await Database.Employer
 					.findOne({ _id: decodedToken.sub })
+          .populate('jobs')
 					.exec()
           .catch((err) => { console.error(err.message); return res.sendStatus(500); });
         if (req.employer) { return next(); }
