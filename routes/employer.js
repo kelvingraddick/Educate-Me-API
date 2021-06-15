@@ -91,7 +91,13 @@ router.get('/:id', async function(req, res, next) {
 
   response.employer = await Database.Employer.findById(req.params.id).exec()
     .catch((error) => { response.errorMessage = error.message; });
-  response.isSuccess = response.employer != null;
+
+  if (response.employer != null) {
+    response.employer.jobs = await Database.Job.find({ employer: req.params.id }).exec()
+      .catch((error) => { response.errorMessage = error.message; });
+  }
+
+  response.isSuccess = response.errorMessage == null;
   
   res.json(response);
 });
