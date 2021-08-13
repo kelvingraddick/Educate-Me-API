@@ -27,6 +27,7 @@ router.post('/register', async function(req, res, next) {
       password: req.body.password,
       title: req.body.title,
       bio: req.body.bio,
+      locations: [req.body.city + ', ' + req.body.state],
       imageUrl: req.body.imageUrl
     };
     Database.Educator.create(newEducator)
