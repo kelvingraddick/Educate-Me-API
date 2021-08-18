@@ -38,7 +38,7 @@ router.post('/create', authorize, async function(req, res, next) {
 router.get('/:id', async function(req, res, next) {
   var response = { isSuccess: false };
 
-  response.job = await Database.Job.findById(req.params.id).exec()
+  response.job = await Database.Job.findById(req.params.id).populate('employer').exec()
     .catch((error) => { response.errorMessage = error.message; });
   response.isSuccess = response.job != null;
   

@@ -27,6 +27,7 @@ router.get('/', async function(req, res, next) {
     ])
   }
 
+  query.populate('employer');
   query.select('-password');
   query.setOptions({
     skip: parseInt(req.query.skip),
