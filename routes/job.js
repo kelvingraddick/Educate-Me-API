@@ -23,6 +23,7 @@ router.post('/create', authorize, async function(req, res, next) {
       state: req.body.state,
       zipCode: req.body.zipCode,
       imageUrl: req.body.imageUrl,
+      postingUrl: req.body.postingUrl,
       categories: req.body.categories
     };
     Database.Job.create(newJob)
