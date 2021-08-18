@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
   state: String,
   zipCode: String,
   imageUrl: String,
+  postingUrl: String,
   categories: [String]
 });
 
