@@ -36,6 +36,25 @@ router.post('/create', authorize, async function(req, res, next) {
   }
 });
 
+router.delete('/delete/:id', authorize, async function(req, res, next) {
+  if (!req.employer) {
+    res.sendStatus(403);
+  } else {
+    Database.Job.findById(req.params.id).populate('employer')
+      .then(async job => {
+        if (job && job.employer._id.equals(req.employer._id)) {
+          var result = await Database.Job.findByIdAndDelete(req.params.id).exec();
+          res.json({ isSuccess: result ? true : false });
+        } else {
+          res.sendStatus(404);
+        }
+      })
+      .catch(error => { 
+        res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
+      });
+  }
+});
+
 router.get('/:id', async function(req, res, next) {
   var response = { isSuccess: false };
 
