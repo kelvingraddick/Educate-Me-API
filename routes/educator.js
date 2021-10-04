@@ -87,4 +87,23 @@ router.get('/:id', async function(req, res, next) {
   res.json(response);
 });
 
+router.get('/:educatorId/jobs', authorize, async function(req, res, next) {
+  var educatorId = req.params.educatorId;
+  if (educatorId != req.educator.id) {
+    res.sendStatus(403);
+  } else {
+    var response = { isSuccess: false };
+
+    const allJobs = await Database.Job
+      .find()
+      .exec()
+      .catch((error) => { response.errorMessage = error.message; });
+
+    response.jobs = allJobs.filter(x => req.educator.locations && req.educator.locations.includes((x.city + ', ' + x.state)));
+    response.isSuccess = response.jobs != null;
+    
+    res.json(response);
+  }
+});
+
 module.exports = router;
