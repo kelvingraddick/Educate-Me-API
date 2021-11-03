@@ -102,4 +102,23 @@ router.get('/:id', async function(req, res, next) {
   res.json(response);
 });
 
+router.get('/:employerId/educators', authorize, async function(req, res, next) {
+  var employerId = req.params.employerId;
+  if (employerId != req.employer.id) {
+    res.sendStatus(403);
+  } else {
+    var response = { isSuccess: false };
+
+    const allEducators = await Database.Educator
+      .find()
+      .exec()
+      .catch((error) => { response.errorMessage = error.message; });
+
+    response.educators = allEducators.filter(x => x.locations && x.locations.includes((req.employer.city + ', ' + req.employer.state)));
+    response.isSuccess = response.educators != null;
+    
+    res.json(response);
+  }
+});
+
 module.exports = router;
