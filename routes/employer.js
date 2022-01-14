@@ -86,6 +86,22 @@ router.post('/:employerId/update', authorize, async function(req, res, next) {
   }
 });
 
+router.delete('/:employerId/delete', authorize, async function(req, res, next) {
+  var employerId = req.params.employerId;
+  if (employerId != req.employer.id) {
+    res.sendStatus(403);
+  } else {
+    Database.Employer.deleteOne({ _id: employerId })
+      .then(async result => {
+        console.info('Employer delete query success: ' + JSON.stringify(result));
+        res.json({ isSuccess: true });
+      })
+      .catch(error => { 
+        res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
+      });
+  }
+});
+
 router.get('/:id', async function(req, res, next) {
   var response = { isSuccess: false };
 

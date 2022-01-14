@@ -77,6 +77,22 @@ router.post('/:educatorId/update', authorize, async function(req, res, next) {
   }
 });
 
+router.delete('/:educatorId/delete', authorize, async function(req, res, next) {
+  var educatorId = req.params.educatorId;
+  if (educatorId != req.educator.id) {
+    res.sendStatus(403);
+  } else {
+    Database.Educator.deleteOne({ _id: educatorId })
+      .then(async result => {
+        console.info('Educator delete query success: ' + JSON.stringify(result));
+        res.json({ isSuccess: true });
+      })
+      .catch(error => { 
+        res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
+      });
+  }
+});
+
 router.get('/:id', async function(req, res, next) {
   var response = { isSuccess: false };
 
