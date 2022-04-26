@@ -9,6 +9,7 @@ var indexRouter = require('./routes/index');
 var educatorRouter = require('./routes/educator');
 var educatorsRouter = require('./routes/educators');
 var employerRouter = require('./routes/employer');
+var employersRouter = require('./routes/employers');
 var jobRouter = require('./routes/job');
 var jobsRouter = require('./routes/jobs');
 
@@ -29,6 +30,7 @@ app.use('/', indexRouter);
 app.use('/educator', educatorRouter);
 app.use('/employer', employerRouter);
 app.use('/educators', educatorsRouter);
+app.use('/employers', employersRouter);
 app.use('/job', jobRouter);
 app.use('/jobs', jobsRouter);
 
