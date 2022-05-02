@@ -8,9 +8,14 @@ const schema = new mongoose.Schema({
   title: String,
   bio: String,
   imageUrl: String,
+  gender: String,
+  race: String,
   documentUrls: [String],
   locations: [String],
-  categories: [String]
+  locationTypes: [String],
+  schoolTypes: [String],
+  schoolLevels: [String],
+  certificationStatus: String
 });
 
 module.exports = mongoose.model('Educator', schema);
