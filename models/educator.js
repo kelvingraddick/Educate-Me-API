@@ -8,9 +8,9 @@ const schema = new mongoose.Schema({
   title: String,
   bio: String,
   imageUrl: String,
+  documentUrls: [String],
   locations: [String],
-  jobCategories: [String],
-  jobs: [Object]
+  categories: [String]
 });
 
 module.exports = mongoose.model('Educator', schema);
