@@ -11,7 +11,6 @@ const schema = new mongoose.Schema({
   gender: String,
   race: String,
   documentUrls: [String],
-  position: String,
   locations: [String],
   locationTypes: [String],
   schoolTypes: [String],

@@ -13,9 +13,12 @@ const schema = new mongoose.Schema({
   city: String,
   state: String,
   zipCode: String,
+  locationType: String,
   imageUrl: String,
   postingUrl: String,
-  categories: [String]
+  schoolType: String,
+  schoolLevel: String,
+  certificationStatus: String
 });
 
 module.exports = mongoose.model('Job', schema);
