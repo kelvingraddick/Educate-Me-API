@@ -21,14 +21,21 @@ router.post('/register', async function(req, res, next) {
     res.json({ isSuccess: false, errorCode: ErrorType.EMAIL_TAKEN, errorMessage: 'This email address is already taken.' });
   } else {
     var newEducator = {
-      name: { first: req.body.firstName, last: req.body.lastName },
+      name: req.body.name,
       emailAddress: req.body.emailAddress,
       phoneNumber: req.body.phoneNumber,
       password: req.body.password,
       title: req.body.title,
       bio: req.body.bio,
-      locations: [req.body.city + ', ' + req.body.state],
-      imageUrl: req.body.imageUrl
+      imageUrl: req.body.imageUrl,
+      gender: req.body.gender,
+      race: req.body.race,
+      documentUrls: req.body.documentUrls,
+      locations: req.body.locations,
+      locationTypes: req.body.locationTypes,
+      schoolTypes: req.body.schoolTypes,
+      schoolLevels: req.body.schoolLevels,
+      certificationStatus: req.body.certificationStatus
     };
     Database.Educator.create(newEducator)
       .then(async createdEducator => {
@@ -50,12 +57,20 @@ router.post('/:educatorId/update', authorize, async function(req, res, next) {
     res.sendStatus(403);
   } else {
     var updatedEducator = {
-      name: { first: req.body.firstName, last: req.body.lastName },
+      name: req.body.name,
       emailAddress: req.body.emailAddress,
       phoneNumber: req.body.phoneNumber,
       title: req.body.title,
       bio: req.body.bio,
-      imageUrl: req.body.imageUrl
+      imageUrl: req.body.imageUrl,
+      gender: req.body.gender,
+      race: req.body.race,
+      documentUrls: req.body.documentUrls,
+      locations: req.body.locations,
+      locationTypes: req.body.locationTypes,
+      schoolTypes: req.body.schoolTypes,
+      schoolLevels: req.body.schoolLevels,
+      certificationStatus: req.body.certificationStatus
     };
     Database.Educator.update({ _id: educatorId }, updatedEducator)
       .then(async numberUpdated => {
