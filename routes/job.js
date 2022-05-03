@@ -21,14 +21,60 @@ router.post('/create', authorize, async function(req, res, next) {
       addressLine2: req.body.addressLine2,
       city: req.body.city,
       state: req.body.state,
+      locationType: req.body.locationType,
       zipCode: req.body.zipCode,
       imageUrl: req.body.imageUrl,
       postingUrl: req.body.postingUrl,
-      categories: req.body.categories
+      schoolType: req.body.schoolType,
+      schoolLevel: req.body.schoolLevel,
+      certificationStatus: req.body.certificationStatus
     };
     Database.Job.create(newJob)
       .then(async createdJob => {
         res.json({ isSuccess: true, job: createdJob });
+      })
+      .catch(error => { 
+        res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
+      });
+  }
+});
+
+router.post('/update/:id', authorize, async function(req, res, next) {
+  var jobId = req.params.id;
+  if (req.employer == null || req.body.employer == null || !req.employer._id.equals(req.body.employer._id)) {
+    res.sendStatus(403);
+  } else {
+    var updatedJob = {
+      type: req.body.type,
+      title: req.body.title,
+      description: req.body.description,
+      instructions: req.body.instructions,
+      addressName: req.body.addressName,
+      addressLine1: req.body.addressLine1,
+      addressLine2: req.body.addressLine2,
+      city: req.body.city,
+      state: req.body.state,
+      locationType: req.body.locationType,
+      zipCode: req.body.zipCode,
+      imageUrl: req.body.imageUrl,
+      postingUrl: req.body.postingUrl,
+      schoolType: req.body.schoolType,
+      schoolLevel: req.body.schoolLevel,
+      certificationStatus: req.body.certificationStatus
+    };
+    Database.Job.update({ _id: jobId }, updatedJob)
+      .then(async numberUpdated => {
+        console.info('Number of jobs updated: ' + JSON.stringify(numberUpdated));
+
+        var foundJob = await Database.Job.findById(jobId);
+        
+        /* TODO: job updated
+        await Email.send(foundEducator.get().emailAddress, 'Welcome to EducateME ' + foundEducator.get().firstName + '!', 'Thank you for joining the EducateME platform', Email.templates.WELCOME_PATIENT)
+          .then(() => {}, error => console.error('Email error: ' + error.message))
+          .catch(error => console.error('Email error: ' + error.message));
+        */
+
+        res.json({ isSuccess: true, job: foundJob });
       })
       .catch(error => { 
         res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
