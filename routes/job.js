@@ -12,7 +12,6 @@ router.post('/create', authorize, async function(req, res, next) {
   } else {
     var newJob = {
       employer: req.employer._id,
-      type: req.body.type,
       title: req.body.title,
       description: req.body.description,
       instructions: req.body.instructions,
@@ -45,7 +44,6 @@ router.post('/update/:id', authorize, async function(req, res, next) {
     res.sendStatus(403);
   } else {
     var updatedJob = {
-      type: req.body.type,
       title: req.body.title,
       description: req.body.description,
       instructions: req.body.instructions,

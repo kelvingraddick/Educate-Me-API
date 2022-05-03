@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
   employer: { type: mongoose.Schema.Types.ObjectId, ref: 'Employer' },
-  type: String,
   title: String,
   description: String,
   instructions: String,
