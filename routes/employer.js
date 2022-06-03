@@ -73,7 +73,7 @@ router.post('/:employerId/update', authorize, async function(req, res, next) {
         var foundEmployer = await Database.Employer.findById(employerId);
         
         /* TODO: employer changed email
-        await Email.send(foundEmployer.get().emailAddress, 'Welcome to EducateME ' + foundEmployer.get().firstName + '!', 'Thank you for joining the EducateME platform', Email.templates.WELCOME_PATIENT)
+        await Email.send(foundEmployer.get().emailAddress, 'Welcome to EDCOM HQ Jobs ' + foundEmployer.get().firstName + '!', 'Thank you for joining the EDCOM HQ Jobs platform', Email.templates.WELCOME_PATIENT)
           .then(() => {}, error => console.error('Email error: ' + error.message))
           .catch(error => console.error('Email error: ' + error.message));
         */

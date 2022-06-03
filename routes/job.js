@@ -67,7 +67,7 @@ router.post('/update/:id', authorize, async function(req, res, next) {
         var foundJob = await Database.Job.findById(jobId);
         
         /* TODO: job updated
-        await Email.send(foundEducator.get().emailAddress, 'Welcome to EducateME ' + foundEducator.get().firstName + '!', 'Thank you for joining the EducateME platform', Email.templates.WELCOME_PATIENT)
+        await Email.send(foundEducator.get().emailAddress, 'Welcome to EDCOM HQ Jobs ' + foundEducator.get().firstName + '!', 'Thank you for joining the EDCOM HQ Jobs platform', Email.templates.WELCOME_PATIENT)
           .then(() => {}, error => console.error('Email error: ' + error.message))
           .catch(error => console.error('Email error: ' + error.message));
         */
