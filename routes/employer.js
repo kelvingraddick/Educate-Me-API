@@ -125,12 +125,25 @@ router.get('/:employerId/educators', authorize, async function(req, res, next) {
   } else {
     var response = { isSuccess: false };
 
+    req.employer.jobs = await Database.Job.find({ employer: req.employer._id }).exec()
+      .catch((error) => { response.errorMessage = error.message; });
+    var employerJobLocations = req.employer.jobs && req.employer.jobs.map(x => x.city + ', ' + x.state);
+    var employerJobLocationTypes = req.employer.jobs && req.employer.jobs.map(x => x.locationType);
+    var employerJobSchoolTypes = req.employer.jobs && req.employer.jobs.map(x => x.schoolType);
+    var employerJobSchoolLevels = req.employer.jobs && req.employer.jobs.map(x => x.schoolLevel);
+
     const allEducators = await Database.Educator
       .find()
       .exec()
       .catch((error) => { response.errorMessage = error.message; });
 
-    response.educators = allEducators.filter(x => x.locations && x.locations.includes((req.employer.city + ', ' + req.employer.state)));
+    response.educators = allEducators.filter(x =>
+      (!x.locations || !employerJobLocations || x.locations.filter(y => employerJobLocations.includes(y)).length > 0) &&
+      (!x.locationTypes || !employerJobLocationTypes || x.locationTypes.filter(y => employerJobLocationTypes.includes(y)).length > 0) &&
+      (!x.schoolTypes || !employerJobSchoolTypes || x.schoolTypes.filter(y => employerJobSchoolTypes.includes(y)).length > 0) &&
+      (!x.schoolLevels || ! employerJobSchoolLevels || x.schoolLevels.filter(y => employerJobSchoolLevels.includes(y)).length > 0)
+    );
+
     response.isSuccess = response.educators != null;
     
     res.json(response);
