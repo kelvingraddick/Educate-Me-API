@@ -58,7 +58,12 @@ router.get('/matches', authorize, async function(req, res, next) {
     for (const educator of allEducators) {
       var match = {
         educator: educator,
-        jobs: allJobs.filter(x => educator.locations && educator.locations.includes((x.city + ', ' + x.state)))
+        jobs: allJobs.filter(x =>
+          (!educator.locations || educator.locations.includes(x.city + ', ' + x.state)) &&
+          (!educator.locationTypes || educator.locationTypes.includes(x.locationType)) &&
+          (!educator.schoolTypes || educator.schoolTypes.includes(x.schoolType)) &&
+          (!educator.schoolLevels || educator.schoolLevels.includes(x.schoolLevel))
+        )
       };
       response.matches.push(match);
     }

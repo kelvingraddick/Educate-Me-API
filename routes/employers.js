@@ -64,9 +64,21 @@ router.get('/matches', authorize, async function(req, res, next) {
       .catch((error) => { response.errorMessage = error.message; });
 
     for (const employer of allEmployers) {
+      employer.jobs = await Database.Job.find({ employer: employer._id }).exec()
+        .catch((error) => { response.errorMessage = error.message; });
+      var employerJobLocations = employer.jobs && employer.jobs.map(x => x.city + ', ' + x.state);
+      var employerJobLocationTypes = employer.jobs && employer.jobs.map(x => x.locationType);
+      var employerJobSchoolTypes = employer.jobs && employer.jobs.map(x => x.schoolType);
+      var employerJobSchoolLevels = employer.jobs && employer.jobs.map(x => x.schoolLevel);
+
       var match = {
         employer: employer,
-        educators: allEducators.filter(x => employer.city && employer.state && x.locations.includes((employer.city + ', ' + employer.state)))
+        educators: allEducators.filter(x =>
+          (!x.locations || !employerJobLocations || x.locations.filter(y => employerJobLocations.includes(y)).length > 0) &&
+          (!x.locationTypes || !employerJobLocationTypes || x.locationTypes.filter(y => employerJobLocationTypes.includes(y)).length > 0) &&
+          (!x.schoolTypes || !employerJobSchoolTypes || x.schoolTypes.filter(y => employerJobSchoolTypes.includes(y)).length > 0) &&
+          (!x.schoolLevels || ! employerJobSchoolLevels || x.schoolLevels.filter(y => employerJobSchoolLevels.includes(y)).length > 0)
+        )
       };
       response.matches.push(match);
     }
