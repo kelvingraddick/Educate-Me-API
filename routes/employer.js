@@ -91,14 +91,19 @@ router.delete('/:employerId/delete', authorize, async function(req, res, next) {
   if (employerId != req.employer.id) {
     res.sendStatus(403);
   } else {
-    Database.Employer.deleteOne({ _id: employerId })
-      .then(async result => {
-        console.info('Employer delete query success: ' + JSON.stringify(result));
-        res.json({ isSuccess: true });
-      })
-      .catch(error => { 
-        res.json({ isSuccess: false, errorCode: ErrorType.DATABASE_PROBLEM, errorMessage: error.message });
-      });
+    var response = { isSuccess: false };
+
+    var employerJobsDeleteResult = await Database.Job.deleteMany({ employer: employerId }).exec()
+      .catch((error) => { response.errorMessage = error.message; });
+    console.info('Employer jobs delete query success: ' + JSON.stringify(employerJobsDeleteResult));
+
+    var employerDeleteResult = await Database.Employer.deleteOne({ _id: employerId }).exec()
+      .catch((error) => { response.errorMessage = error.message; });
+    console.info('Employer delete query success: ' + JSON.stringify(employerDeleteResult));
+
+    response.isSuccess = response.errorMessage == null;
+    
+    res.json(response);
   }
 });
 
