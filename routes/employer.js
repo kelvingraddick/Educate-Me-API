@@ -51,7 +51,7 @@ router.post('/:employerId/update', authorize, async function(req, res, next) {
   var existingEmployer = await Database.Employer.findOne({ emailAddress: req.body.emailAddress }).exec();
   if (existingEmployer && existingEmployer._id != employerId) {
     res.json({ isSuccess: false, errorCode: ErrorType.EMAIL_TAKEN, errorMessage: 'This email address is already taken.' });
-  } else if (employerId != req.employer?.id && !req.educator?.isAdmin && !req.employer?.isAdmin) {
+  } else if (employerId != req.employer?.id && !req.educator?.isAdmin) {
     res.sendStatus(403);
   } else {
     var updatedEmployer = {
@@ -89,7 +89,7 @@ router.post('/:employerId/update', authorize, async function(req, res, next) {
 
 router.delete('/:employerId/delete', authorize, async function(req, res, next) {
   var employerId = req.params.employerId;
-  if (employerId != req.employer?.id && !req.educator?.isAdmin && !req.employer?.isAdmin) {
+  if (employerId != req.employer?.id && !req.educator?.isAdmin) {
     res.sendStatus(403);
   } else {
     var response = { isSuccess: false };
@@ -126,7 +126,7 @@ router.get('/:id', async function(req, res, next) {
 
 router.get('/:employerId/educators', authorize, async function(req, res, next) {
   var employerId = req.params.employerId;
-  if (employerId != req.employer?.id && !req.educator?.isAdmin && !req.employer?.isAdmin) {
+  if (employerId != req.employer?.id && !req.educator?.isAdmin) {
     res.sendStatus(403);
   } else {
     var response = { isSuccess: false };

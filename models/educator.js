@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-  isAdmin: Boolean,
   name: { first: String, last: String },
   emailAddress: String,
   phoneNumber: String,
