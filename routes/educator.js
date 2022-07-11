@@ -53,7 +53,7 @@ router.post('/:educatorId/update', authorize, async function(req, res, next) {
   var existingEducator = await Database.Educator.findOne({ emailAddress: req.body.emailAddress }).exec();
   if (existingEducator && existingEducator._id != educatorId) {
     res.json({ isSuccess: false, errorCode: ErrorType.EMAIL_TAKEN, errorMessage: 'This email address is already taken.' });
-  } else if (educatorId != req.educator?.id && !req.educator?.isAdmin) {
+  } else if (educatorId != req.educator?.id && !req.employer?.isAdmin) {
     res.sendStatus(403);
   } else {
     var updatedEducator = {
@@ -94,7 +94,7 @@ router.post('/:educatorId/update', authorize, async function(req, res, next) {
 
 router.delete('/:educatorId/delete', authorize, async function(req, res, next) {
   var educatorId = req.params.educatorId;
-  if (educatorId != req.educator?.id && !req.educator?.isAdmin) {
+  if (educatorId != req.educator?.id && !req.employer?.isAdmin) {
     res.sendStatus(403);
   } else {
     Database.Educator.deleteOne({ _id: educatorId })
@@ -120,7 +120,7 @@ router.get('/:id', async function(req, res, next) {
 
 router.get('/:educatorId/jobs', authorize, async function(req, res, next) {
   var educatorId = req.params.educatorId;
-  if (educatorId != req.educator?.id && !req.educator?.isAdmin) {
+  if (educatorId != req.educator?.id && !req.employer?.isAdmin) {
     res.sendStatus(403);
   } else {
     var response = { isSuccess: false };
