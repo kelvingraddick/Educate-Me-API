@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
+  isAdmin: Boolean,
   name: String,
   emailAddress: String,
   phoneNumber: String,

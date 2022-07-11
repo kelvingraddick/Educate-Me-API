@@ -40,7 +40,7 @@ router.post('/create', authorize, async function(req, res, next) {
 
 router.post('/update/:id', authorize, async function(req, res, next) {
   var jobId = req.params.id;
-  if (req.employer == null || req.body.employer == null || !req.employer._id.equals(req.body.employer._id)) {
+  if ((req.employer == null || req.body.employer == null || !req.employer._id.equals(req.body.employer._id)) && !req.educator.isAdmin && !req.employer.isAdmin) {
     res.sendStatus(403);
   } else {
     var updatedJob = {
@@ -81,7 +81,7 @@ router.post('/update/:id', authorize, async function(req, res, next) {
 });
 
 router.delete('/delete/:id', authorize, async function(req, res, next) {
-  if (!req.employer) {
+  if (!req.employer && !req.educator.isAdmin && !req.employer.isAdmin) {
     res.sendStatus(403);
   } else {
     Database.Job.findById(req.params.id).populate('employer')
