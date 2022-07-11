@@ -130,11 +130,14 @@ router.get('/:educatorId/jobs', authorize, async function(req, res, next) {
       .exec()
       .catch((error) => { response.errorMessage = error.message; });
 
+    const educator = await Database.Educator.findById(educatorId).exec()
+      .catch((error) => { response.errorMessage = error.message; });
+
     response.jobs = allJobs.filter(x =>
-      (!req.educator.locations || req.educator.locations.includes(x.city + ', ' + x.state)) &&
-      (!req.educator.locationTypes || req.educator.locationTypes.includes(x.locationType)) &&
-      (!req.educator.schoolTypes || req.educator.schoolTypes.includes(x.schoolType)) &&
-      (!req.educator.schoolLevels || req.educator.schoolLevels.includes(x.schoolLevel))
+      (!educator.locations || educator.locations.includes(x.city + ', ' + x.state)) &&
+      (!educator.locationTypes || educator.locationTypes.includes(x.locationType)) &&
+      (!educator.schoolTypes || educator.schoolTypes.includes(x.schoolType)) &&
+      (!educator.schoolLevels || educator.schoolLevels.includes(x.schoolLevel))
     );
     response.isSuccess = response.jobs != null;
     
